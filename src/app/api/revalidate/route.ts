@@ -16,7 +16,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 
-  console.log("revalitation", tags);
   revalidateTag(tags);
 
   return NextResponse.json({ revalidated: true, now: Date.now() });
