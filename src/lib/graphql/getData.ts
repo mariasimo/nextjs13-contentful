@@ -1,19 +1,19 @@
 import { isString } from "@/utils/types/isString";
 
-const CONTENTFUL_API_URL = process.env.CONTENTFUL_API_URL;
-const CONTENFUL_ACCESS_TOKEN = process.env.CONTENFUL_ACCESS_TOKEN;
-
 type GetDataOptions = RequestInit & {
   variables?: { [key: string]: string | boolean };
 };
 
 export async function getData(query: string, options?: GetDataOptions) {
-  if (!isString(CONTENTFUL_API_URL)) {
-    throw new Error("Missing env variable for CONTENTFUL_API_URL");
+  if (!isString(process.env.CONTENTFUL_SPACE_ID)) {
+    throw new Error("Missing env variable for CONTENTFUL_SPACE_ID");
   }
-  if (!isString(CONTENFUL_ACCESS_TOKEN)) {
-    throw new Error("Missing env variable for CONTENFUL_ACCESS_TOKEN");
+  if (!isString(process.env.CONTENTFUL_ACCESS_TOKEN)) {
+    throw new Error("Missing env variable for CONTENTFUL_ACCESS_TOKEN");
   }
+
+  const CONTENTFUL_API_URL = `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}`;
+  const CONTENTFUL_ACCESS_TOKEN = process.env.CONTENTFUL_ACCESS_TOKEN;
 
   // TODO missing error validation
 
@@ -21,7 +21,7 @@ export async function getData(query: string, options?: GetDataOptions) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${CONTENFUL_ACCESS_TOKEN}`,
+      Authorization: `Bearer ${CONTENTFUL_ACCESS_TOKEN}`,
     },
     body: JSON.stringify({
       query,
