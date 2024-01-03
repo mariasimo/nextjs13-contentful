@@ -1,12 +1,25 @@
+import { z } from "zod";
 import { getData } from "./getData";
+
+export const customPageSchema = z.object({
+  title: z.string(),
+});
+
+export const customPageCollectionSchema = z.array(
+  z.object({
+    slug: z.string(),
+  })
+);
+
+export type CustomPageCollection = z.TypeOf<typeof customPageCollectionSchema>;
+export type CustomPage = z.TypeOf<typeof customPageSchema>;
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
   query CustomPageCollection {
     customPageCollection {
-        items {
-            title
-            slug
-        }
+      items {
+        slug
+      }
     }
 }
 `;
@@ -21,25 +34,33 @@ const GET_CUSTOM_PAGE = `#graphql
   }
 `;
 
-export async function getAllCustomPages() {
-  // TODO missing type fetched data
+export async function getAllCustomPages(): Promise<CustomPageCollection> {
   const { data } = await getData(GET_CUSTOM_PAGE_COLLECTION, {
     next: { tags: ["custom"] },
   });
 
-  return data.customPageCollection;
+  const parsed = customPageCollectionSchema.parse(
+    data?.customPageCollection?.items
+  );
+
+  return parsed;
 }
 
 export async function getCustomPage(
   slug: string,
   { preview }: { preview?: boolean }
-) {
-  // TODO missing type fetched data
+): Promise<CustomPage | undefined> {
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },
     variables: { slug, preview: !!preview },
     preview,
   });
 
-  return data.customPageCollection.items[0];
+  const parsed = customPageSchema.safeParse(
+    data?.customPageCollection?.items[0]
+  );
+
+  if (parsed.success) {
+    return parsed.data;
+  }
 }

@@ -1,4 +1,4 @@
-import { isString } from "@/utils/types/isString";
+import { checkStringNotEmpty } from "@/utils/types/checkString";
 
 type GetDataOptions = RequestInit & {
   variables?: { [key: string]: string | boolean };
@@ -6,29 +6,27 @@ type GetDataOptions = RequestInit & {
 };
 
 export async function getData(query: string, options?: GetDataOptions) {
-  if (!isString(process.env.CONTENTFUL_SPACE_ID)) {
-    throw new Error("Missing env variable for CONTENTFUL_SPACE_ID");
-  }
-  if (!isString(process.env.CONTENTFUL_ACCESS_TOKEN)) {
-    throw new Error("Missing env variable for CONTENTFUL_ACCESS_TOKEN");
-  }
-  if (!isString(process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN)) {
-    throw new Error("Missing env variable for CONTENTFUL_PREVIEW_ACCESS_TOKEN");
-  }
+  const accessToken = checkStringNotEmpty(
+    process.env.CONTENTFUL_ACCESS_TOKEN,
+    "Missing env variable for CONTENTFUL_ACCESS_TOKEN"
+  );
+  const previewAccessToken = checkStringNotEmpty(
+    process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+    "Missing env variable for CONTENTFUL_PREVIEW_ACCESS_TOKEN"
+  );
 
-  const CONTENTFUL_API_URL = `https://graphql.contentful.com/content/v1/spaces/${process.env.CONTENTFUL_SPACE_ID}`;
+  const apiUrl = `https://graphql.contentful.com/content/v1/spaces/${checkStringNotEmpty(
+    process.env.CONTENTFUL_SPACE_ID,
+    "Missing env variable for CONTENTFUL_SPACE_ID"
+  )}`;
 
-  const ACCESS_TOKEN = options?.preview
-    ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
-    : process.env.CONTENTFUL_ACCESS_TOKEN;
-
-  // TODO missing error validation
-
-  return fetch(CONTENTFUL_API_URL, {
+  return fetch(apiUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${
+        options?.preview ? previewAccessToken : accessToken
+      }`,
     },
     body: JSON.stringify({
       query,
@@ -36,7 +34,11 @@ export async function getData(query: string, options?: GetDataOptions) {
     }),
     next: options?.next,
     cache: process.env.NODE_ENV === "development" ? "no-cache" : "default",
-  }).then((res) => {
-    return res.json();
-  });
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
 }
