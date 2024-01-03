@@ -9,7 +9,8 @@ import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
-  const data = await getAllCustomPages();
+  const { isEnabled } = draftMode();
+  const data = await getAllCustomPages({ preview: isEnabled });
 
   console.log(data.items);
 
