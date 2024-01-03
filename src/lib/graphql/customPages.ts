@@ -2,7 +2,7 @@ import { getData } from "./getData";
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
   query CustomPageCollection($preview: Boolean) {
-    customPageCollection(where: {preview: $preview}) {
+    customPageCollection(preview: $preview) {
         items {
             title
             slug
@@ -13,9 +13,9 @@ const GET_CUSTOM_PAGE_COLLECTION = `#graphql
 
 const GET_CUSTOM_PAGE = `#graphql
     query CustomPageCollection($slug: String!, $preview: Boolean) {
-        customPageCollection(where: {slug: $slug, preview: $preview}) {
+        customPageCollection(where: {slug: $slug}, preview: $preview) {
             items {
-            title
+              title
             }
         }
     }
