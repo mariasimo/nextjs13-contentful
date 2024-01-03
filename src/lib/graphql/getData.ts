@@ -17,6 +17,8 @@ export async function getData(query: string, options?: GetDataOptions) {
 
   // TODO missing error validation
 
+  console.log("options", options);
+
   return fetch(CONTENTFUL_API_URL, {
     method: "POST",
     headers: {
@@ -27,7 +29,7 @@ export async function getData(query: string, options?: GetDataOptions) {
       query,
       variables: options?.variables,
     }),
-    next: { tags: ["custom"] },
+    next: options?.next,
   }).then((res) => {
     return res.json();
   });
