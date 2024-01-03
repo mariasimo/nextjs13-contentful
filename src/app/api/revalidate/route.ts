@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Missing tags" }, { status: 401 });
   }
 
+  console.log("revalidate");
   revalidateTag(tag);
 
   return NextResponse.json({ revalidated: true, now: Date.now() });

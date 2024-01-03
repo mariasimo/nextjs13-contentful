@@ -1,4 +1,3 @@
-import { getCustomPage } from "@/lib/graphql/customPages";
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import { NextRequest } from "next/server";
@@ -8,10 +7,6 @@ export async function GET(request: NextRequest) {
   const secret = searchParams.get("secret");
   const slug = searchParams.get("slug");
   const requestHeaders = new Headers(request.headers);
-
-  requestHeaders.forEach((value, key) => {
-    console.log(`${key} ==> ${value}`);
-  });
 
   if (!secret || !slug) {
     return new Response("Missing parameters", { status: 400 });

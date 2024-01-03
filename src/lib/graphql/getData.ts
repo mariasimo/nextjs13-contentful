@@ -37,7 +37,6 @@ export async function getData(query: string, options?: GetDataOptions) {
       variables: options?.variables,
     }),
     next: options?.next,
-    cache: "no-cache",
   }).then((res) => {
     return res.json();
   });
