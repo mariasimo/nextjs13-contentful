@@ -35,6 +35,7 @@ export async function getData(query: string, options?: GetDataOptions) {
       variables: options?.variables,
     }),
     next: options?.next,
+    cache: process.env.NODE_ENV === "development" ? "no-cache" : "default",
   }).then((res) => {
     return res.json();
   });
