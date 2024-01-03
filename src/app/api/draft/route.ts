@@ -7,6 +7,11 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get("secret");
   const slug = searchParams.get("slug");
+  const requestHeaders = new Headers(request.headers);
+
+  requestHeaders.forEach((value, key) => {
+    console.log(`${key} ==> ${value}`);
+  });
 
   if (!secret || !slug) {
     return new Response("Missing parameters", { status: 400 });
@@ -15,6 +20,11 @@ export async function GET(request: NextRequest) {
   if (secret !== process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN) {
     return new Response("Invalid token", { status: 401 });
   }
+
+  requestHeaders.set(
+    "Content-Security-Policy",
+    "default-src 'self' app.contentful.com *.contentful.com"
+  );
 
   draftMode().enable();
   redirect(`/${slug}`);
