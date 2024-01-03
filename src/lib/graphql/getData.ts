@@ -27,7 +27,7 @@ export async function getData(query: string, options?: GetDataOptions) {
       query,
       variables: options?.variables,
     }),
-    next: options?.next,
+    next: { tags: ["custom"] },
   }).then((res) => {
     return res.json();
   });
