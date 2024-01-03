@@ -1,8 +1,8 @@
 import { getData } from "./getData";
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
-  query CustomPageCollection($preview: Boolean) {
-    customPageCollection(preview: $preview) {
+  query CustomPageCollection {
+    customPageCollection {
         items {
             title
             slug
@@ -12,8 +12,8 @@ const GET_CUSTOM_PAGE_COLLECTION = `#graphql
 `;
 
 const GET_CUSTOM_PAGE = `#graphql
-    query CustomPageCollection($slug: String!, $preview: Boolean) {
-        customPageCollection(where: {slug: $slug}, preview: $preview) {
+    query CustomPageCollection($slug: String!) {
+        customPageCollection(where: {slug: $slug}) {
             items {
               title
             }
@@ -21,24 +21,20 @@ const GET_CUSTOM_PAGE = `#graphql
     }
 `;
 
-export async function getAllCustomPages(isDraftMode: boolean = false) {
+export async function getAllCustomPages() {
   // TODO missing type fetched data
   const { data } = await getData(GET_CUSTOM_PAGE_COLLECTION, {
     next: { tags: ["custom"] },
-    variables: { preview: isDraftMode },
   });
 
   return data.customPageCollection;
 }
 
-export async function getCustomPage(
-  slug: string,
-  isDraftMode: boolean = false
-) {
+export async function getCustomPage(slug: string) {
   // TODO missing type fetched data
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },
-    variables: { slug, preview: isDraftMode },
+    variables: { slug },
   });
 
   return data.customPageCollection.items[0];

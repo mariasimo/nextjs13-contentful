@@ -5,7 +5,6 @@
  */
 
 import { getAllCustomPages, getCustomPage } from "@/lib/graphql/customPages";
-import { draftMode } from "next/headers";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -24,8 +23,7 @@ export default async function CustomPage({
     customPage: string;
   };
 }) {
-  const { isEnabled } = draftMode();
-  const customPageData = await getCustomPage(params.customPage, isEnabled);
+  const customPageData = await getCustomPage(params.customPage);
 
   if (!customPageData) {
     notFound();

@@ -2,8 +2,6 @@ import { isString } from "@/utils/types/isString";
 
 const CONTENTFUL_API_URL = process.env.CONTENTFUL_API_URL;
 const CONTENFUL_ACCESS_TOKEN = process.env.CONTENFUL_ACCESS_TOKEN;
-const CONTENTFUL_PREVIEW_ACCESS_TOKEN =
-  process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN;
 
 type GetDataOptions = RequestInit & {
   variables?: { [key: string]: string | boolean };
@@ -16,9 +14,6 @@ export async function getData(query: string, options?: GetDataOptions) {
   if (!isString(CONTENFUL_ACCESS_TOKEN)) {
     throw new Error("Missing env variable for CONTENFUL_ACCESS_TOKEN");
   }
-  if (!isString(CONTENTFUL_PREVIEW_ACCESS_TOKEN)) {
-    throw new Error("Missing env variable for CONTENTFUL_PREVIEW_ACCESS_TOKEN");
-  }
 
   // TODO missing error validation
 
@@ -26,11 +21,7 @@ export async function getData(query: string, options?: GetDataOptions) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${
-        options?.variables?.preview
-          ? CONTENTFUL_PREVIEW_ACCESS_TOKEN
-          : CONTENFUL_ACCESS_TOKEN
-      }`,
+      Authorization: `Bearer ${CONTENFUL_ACCESS_TOKEN}`,
     },
     body: JSON.stringify({
       query,
