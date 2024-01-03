@@ -11,8 +11,6 @@ import { notFound } from "next/navigation";
 export async function generateStaticParams() {
   const data = await getAllCustomPages();
 
-  console.log(data.items);
-
   // TODO strict type this
   return data.items.map((page: any) => {
     return { customPage: page.slug };

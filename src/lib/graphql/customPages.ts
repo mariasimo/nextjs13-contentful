@@ -1,8 +1,8 @@
 import { getData } from "./getData";
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
-  query CustomPageCollection($preview: Boolean) {
-    customPageCollection(preview: $preview) {
+  query CustomPageCollection {
+    customPageCollection {
         items {
             title
             slug
@@ -21,13 +21,10 @@ const GET_CUSTOM_PAGE = `#graphql
   }
 `;
 
-export async function getAllCustomPages({
-  preview,
-}: { preview?: boolean } = {}) {
+export async function getAllCustomPages() {
   // TODO missing type fetched data
   const { data } = await getData(GET_CUSTOM_PAGE_COLLECTION, {
     next: { tags: ["custom"] },
-    variables: { preview: !!preview },
   });
 
   return data.customPageCollection;

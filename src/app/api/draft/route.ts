@@ -16,12 +16,10 @@ export async function GET(request: NextRequest) {
     return new Response("Invalid token", { status: 401 });
   }
 
-  console.log({ secret, slug });
-
-  // requestHeaders.set(
-  //   "Content-Security-Policy",
-  //   "default-src 'self' app.contentful.com *.contentful.com"
-  // );
+  requestHeaders.set(
+    "Content-Security-Policy",
+    "default-src 'self' app.contentful.com *.contentful.com"
+  );
 
   draftMode().enable();
   redirect(`/${slug}`);
