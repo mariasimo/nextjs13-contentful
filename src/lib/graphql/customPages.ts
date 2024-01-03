@@ -27,7 +27,7 @@ export async function getAllCustomPages({
   // TODO missing type fetched data
   const { data } = await getData(GET_CUSTOM_PAGE_COLLECTION, {
     next: { tags: ["custom"] },
-    preview,
+    variables: { preview: !!preview },
   });
 
   return data.customPageCollection;
@@ -40,7 +40,7 @@ export async function getCustomPage(
   // TODO missing type fetched data
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },
-    variables: { slug },
+    variables: { slug, preview: !!preview },
     preview,
   });
 
