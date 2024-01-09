@@ -36,6 +36,9 @@ export async function getData(query: string, options?: GetDataOptions) {
     cache: process.env.NODE_ENV === "development" ? "no-cache" : "default",
   })
     .then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to fetch");
+      }
       return res.json();
     })
     .catch((err) => {
