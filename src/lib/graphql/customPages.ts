@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getData } from "./getData";
+import { getData } from "./_getData";
 
 export const customPageSchema = z.object({
   title: z.string(),
@@ -15,8 +15,8 @@ export type CustomPageCollection = z.TypeOf<typeof customPageCollectionSchema>;
 export type CustomPage = z.TypeOf<typeof customPageSchema>;
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
-  query CustomPageCollection {
-    customPageCollection {
+  query CustomPageCollection($locale: String) {
+    customPageCollection(locale: $locale) {
       items {
         slug
       }
@@ -25,8 +25,8 @@ const GET_CUSTOM_PAGE_COLLECTION = `#graphql
 `;
 
 const GET_CUSTOM_PAGE = `#graphql
-  query CustomPageCollection($slug: String!, $preview: Boolean) {
-      customPageCollection(where: {slug: $slug}, preview: $preview) {
+  query CustomPageCollection($slug: String!, $preview: Boolean, $locale: String) {
+      customPageCollection(where: {slug: $slug}, preview: $preview, locale: $locale) {
           items {
             title
           }
@@ -48,11 +48,13 @@ export async function getAllCustomPages(): Promise<CustomPageCollection> {
 
 export async function getCustomPage(
   slug: string,
-  { preview }: { preview?: boolean }
+  { preview }: { preview?: boolean },
+  locale?: Locale
 ): Promise<CustomPage | undefined> {
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },
     variables: { slug, preview: !!preview },
+    locale,
     preview,
   });
 

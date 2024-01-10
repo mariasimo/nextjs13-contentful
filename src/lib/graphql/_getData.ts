@@ -3,9 +3,13 @@ import { checkStringNotEmpty } from "@/utils/types/checkString";
 type GetDataOptions = RequestInit & {
   variables?: { [key: string]: string | boolean };
   preview?: boolean;
+  locale?: Locale;
 };
 
 export async function getData(query: string, options?: GetDataOptions) {
+  const locale = options?.locale || "en-US";
+  const variables = { ...options?.variables, locale };
+
   const accessToken = checkStringNotEmpty(
     process.env.CONTENTFUL_ACCESS_TOKEN,
     "Missing env variable for CONTENTFUL_ACCESS_TOKEN"
@@ -30,7 +34,7 @@ export async function getData(query: string, options?: GetDataOptions) {
     },
     body: JSON.stringify({
       query,
-      variables: options?.variables,
+      variables,
     }),
     next: options?.next,
     cache: process.env.NODE_ENV === "development" ? "no-cache" : "default",
