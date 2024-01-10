@@ -1,3 +1,5 @@
+import "server-only";
+
 import { checkStringNotEmpty } from "@/utils/types/checkString";
 
 type GetDataOptions = RequestInit & {
@@ -7,7 +9,7 @@ type GetDataOptions = RequestInit & {
 };
 
 export async function getData(query: string, options?: GetDataOptions) {
-  const locale = options?.locale || "en-US";
+  const locale = options?.locale || "es-ES";
   const variables = { ...options?.variables, locale };
 
   const accessToken = checkStringNotEmpty(
