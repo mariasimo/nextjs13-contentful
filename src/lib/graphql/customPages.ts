@@ -15,8 +15,8 @@ export type CustomPageCollection = z.TypeOf<typeof customPageCollectionSchema>;
 export type CustomPage = z.TypeOf<typeof customPageSchema>;
 
 const GET_CUSTOM_PAGE_COLLECTION = `#graphql
-  query CustomPageCollection($locale: String) {
-    customPageCollection(locale: $locale) {
+  query CustomPageCollection {
+    customPageCollection {
       items {
         slug
       }
@@ -48,8 +48,7 @@ export async function getAllCustomPages(): Promise<CustomPageCollection> {
 
 export async function getCustomPage(
   slug: string,
-  { preview }: { preview?: boolean },
-  locale?: string
+  { preview, locale }: { preview?: boolean; locale?: string }
 ): Promise<CustomPage | undefined> {
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },

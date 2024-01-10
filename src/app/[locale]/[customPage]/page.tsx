@@ -21,12 +21,14 @@ export default async function CustomPage({
 }: {
   params: {
     customPage: string;
+    locale: string;
   };
 }) {
   const { isEnabled } = draftMode();
 
   const customPageData = await getCustomPage(params.customPage, {
     preview: isEnabled,
+    locale: params.locale,
   });
 
   if (!customPageData) {
