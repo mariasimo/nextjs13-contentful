@@ -8,6 +8,6 @@ const GET_HOMEPAGE_DATA = `#graphql
   }
 `;
 
-export async function getHomePage(locale?: Locale) {
+export async function getHomePage(locale?: string) {
   return getData(GET_HOMEPAGE_DATA, { locale });
 }

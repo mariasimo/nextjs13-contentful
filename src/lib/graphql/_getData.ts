@@ -5,7 +5,7 @@ import { checkStringNotEmpty } from "@/utils/types/checkString";
 type GetDataOptions = RequestInit & {
   variables?: { [key: string]: string | boolean };
   preview?: boolean;
-  locale?: Locale;
+  locale?: string;
 };
 
 export async function getData(query: string, options?: GetDataOptions) {

@@ -4,9 +4,9 @@ export default async function Page({
   params,
 }: {
   params: {
-    lang: string;
+    locale: string;
   };
 }) {
-  const data = await getHomePage();
+  const data = await getHomePage(params.locale);
   return <main>{JSON.stringify(data)}</main>;
 }

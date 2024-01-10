@@ -49,7 +49,7 @@ export async function getAllCustomPages(): Promise<CustomPageCollection> {
 export async function getCustomPage(
   slug: string,
   { preview }: { preview?: boolean },
-  locale?: Locale
+  locale?: string
 ): Promise<CustomPage | undefined> {
   const { data } = await getData(GET_CUSTOM_PAGE, {
     next: { tags: ["custom"] },
