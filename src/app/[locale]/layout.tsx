@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export async function generateStaticParams() {
   return locales.map((locale) => {
-    return { lang: locale };
+    return { locale };
   });
 }
 
