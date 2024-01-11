@@ -39,11 +39,15 @@ export async function getAllCustomPages(): Promise<CustomPageCollection> {
     next: { tags: ["custom"] },
   });
 
-  const parsed = customPageCollectionSchema.parse(
+  const parsed = customPageCollectionSchema.safeParse(
     data?.customPageCollection?.items
   );
 
-  return parsed;
+  if (parsed.success) {
+    return parsed.data;
+  }
+
+  throw new Error("Error parsing custom page slugs data");
 }
 
 export async function getCustomPage(
