@@ -11,8 +11,7 @@ import { notFound } from "next/navigation";
 export async function generateStaticParams() {
   const data = await getAllCustomPages();
 
-  // TODO strict type this
-  return data.items.map((page: any) => {
+  return data.map((page: any) => {
     return { customPage: page.slug };
   });
 }
@@ -22,12 +21,14 @@ export default async function CustomPage({
 }: {
   params: {
     customPage: string;
+    locale: string;
   };
 }) {
   const { isEnabled } = draftMode();
 
   const customPageData = await getCustomPage(params.customPage, {
     preview: isEnabled,
+    locale: params.locale,
   });
 
   if (!customPageData) {
